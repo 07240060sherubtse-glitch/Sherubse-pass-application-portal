@@ -120,6 +120,7 @@ Student registration now sends a verification link to the registered email addre
 Add the following settings to your local `.env` file (do not replace your database or JWT settings):
 
 ```env
+# SMTP is the default provider for local development.
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_SECURE=false
@@ -133,6 +134,17 @@ API_URL=https://your-backend.example.com
 
 Verification links use `API_URL` when set, then fall back to `APP_URL`. The link host must serve this Express API, including `GET /api/auth/verify-email`; a frontend-only host will return “Cannot GET”. For local testing, keep `APP_URL=http://localhost:3000` and open the email on the same computer running the server. If changing the host, request a new verification email because existing links retain their original host and expire after 24 hours.
 
-For Gmail, use a Google App Password, not your regular account password. Then run `npm install` to install the added Nodemailer dependency, followed by `npm run db:schema` to apply the database changes. Start the portal with `npm run dev`.
+### Use Google Apps Script email on Render Free
+
+Render Free blocks outbound SMTP connections on common SMTP ports. The optional `apps-script` provider sends email over HTTPS and uses the Google account that owns the script.
+
+1. Sign in to the Google account that should send verification emails and open [script.google.com](https://script.google.com). Create a new project.
+2. Open `apps-script/Code.gs` in VS Code and copy its contents into the Apps Script editor.
+3. In **Project Settings → Script Properties**, add `APPS_SCRIPT_MAIL_SECRET` and set it to a long, random value. Use the same value in Render; do not share or commit it.
+4. Click **Deploy → New deployment → Web app**. Set **Execute as** to yourself and access to **Anyone**, then deploy and authorize the requested Gmail permission. “Anyone” is needed so Render can call the web app; the script checks the shared secret before sending. Copy the deployed URL ending in `/exec`.
+5. In Render → your service → **Environment**, add `EMAIL_PROVIDER=apps-script`, `APPS_SCRIPT_MAIL_URL` set to the `/exec` URL, and `APPS_SCRIPT_MAIL_SECRET` set to the same secret from Script Properties. Keep `API_URL` set to the Render API origin so verification links point back to this app. Save and redeploy.
+6. Register a test account or use **Resend verification email**. Check the Apps Script **Executions** page if sending fails. After changing the script, update the deployment to a new version.
+
+Apps Script sends from the Google account that owns the web app, not an arbitrary `MAIL_FROM` address. Consumer Google accounts currently have a daily recipient quota; quotas can change. Check the college’s policies before sending student information through a personal account. For local SMTP, use a Google App Password, not your regular password.
 
 The review sequence is now: Student submits → SSO first review (`pending_sso`) → DSA final review (`pending_dsa`) → Approved. Rejections remain final. Existing pending requests are migrated once to the corresponding new review stage.
