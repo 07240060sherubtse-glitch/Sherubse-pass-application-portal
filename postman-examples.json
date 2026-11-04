@@ -1,0 +1,12 @@
+{
+  "info": {"name":"Sherubtse Pass Application Portal","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},
+  "variable":[{"key":"baseUrl","value":"http://localhost:3000/api"},{"key":"token","value":"paste-login-token-here"},{"key":"requestId","value":"1"}],
+  "item":[
+    {"name":"Health","request":{"method":"GET","url":"{{baseUrl}}/health"}},
+    {"name":"Register student","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"fullName\":\"Demo Student\",\"studentNumber\":\"STU-001\",\"email\":\"student@example.com\",\"password\":\"ChangeThis123!\"}"},"url":"{{baseUrl}}/auth/register"}},
+    {"name":"Login","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"email\":\"student@example.com\",\"password\":\"ChangeThis123!\",\"role\":\"student\"}"},"url":"{{baseUrl}}/auth/login"}},
+    {"name":"Create leave request","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"},{"key":"Authorization","value":"Bearer {{token}}"}],"body":{"mode":"raw","raw":"{\"leaveType\":\"Personal\",\"startDate\":\"2027-01-10\",\"endDate\":\"2027-01-11\",\"reason\":\"Family matter\"}"},"url":"{{baseUrl}}/leave-requests"}},
+    {"name":"List requests","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{token}}"}],"url":"{{baseUrl}}/leave-requests"}},
+    {"name":"Approve/reject at current stage","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"},{"key":"Authorization","value":"Bearer {{token}}"}],"body":{"mode":"raw","raw":"{\"decision\":\"approved\",\"comment\":\"Reviewed and approved.\"}"},"url":"{{baseUrl}}/leave-requests/{{requestId}}/decision"}}
+  ]
+}

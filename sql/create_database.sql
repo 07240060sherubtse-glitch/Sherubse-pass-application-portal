@@ -1,0 +1,3 @@
+-- Run this script while connected to the default `postgres` database.
+-- PostgreSQL does not allow CREATE DATABASE inside a transaction block.
+CREATE DATABASE sherubtse_pass_portal;

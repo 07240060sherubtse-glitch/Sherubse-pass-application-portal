@@ -1,0 +1,255 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#142b4a">
+    <title>Sherubtse Pass Application Portal</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="app-shell">
+    <aside class="sidebar">
+        <a class="brand" href="/" aria-label="Sherubtse College Pass Portal">
+            <img class="brand-logo"
+                src="https://www.sherubtse.edu.bt/wp-content/uploads/elementor/thumbs/sherubtselogohd-e1777759660776-rmvvctsv3deuk0n4h1bl2n4sfv96e29tgmbvi50qug.png"
+                alt="Sherubtse College official logo">
+            <span class="brand-copy">
+                <b>SHERUBTSE</b>
+                <small>APPLICATION PASS PORTAL</small>
+            </span>
+        </a>
+
+        <div class="college-note">
+            STUDENT SERVICES<br>
+            <span>Leave & pass management</span>
+        </div>
+
+        <div class="side-foot">
+            <span class="status-dot"></span>
+            Secure college portal
+        </div>
+    </aside>
+
+    <main class="main-area">
+        <header class="topbar">
+            <div>
+                <span class="eyebrow">SHERUBTSE COLLEGE</span>
+                <h1 id="page-heading">Welcome to your pass portal</h1>
+            </div>
+
+            <div class="top-actions">
+                <span id="api-status" class="api-status">
+                    Checking database…
+                </span>
+                <button id="logout-btn" class="btn btn-ghost hidden">
+                    Sign out
+                </button>
+            </div>
+        </header>
+
+        <div id="toast" class="toast hidden" role="status"></div>
+
+        <section id="auth-view" class="auth-layout">
+
+            <div class="welcome-panel">
+                <span class="pill pill-light">
+                    ONE PORTAL. CLEAR DECISIONS.
+                </span>
+
+                <h2>Leave requests,<br>made simpler.</h2>
+
+                <p>
+                    Apply online, follow every decision and keep your
+                    leave history in one secure place.
+                </p>
+
+                <div class="steps">
+                    <div>
+                        <span>01</span>
+                        <p>
+                            <b>Apply</b>
+                            <small>Submit your dates and reason.</small>
+                        </p>
+                    </div>
+
+                    <div>
+                        <span>02</span>
+                        <p>
+                            <b>Review</b>
+                            <small>SSO then DSA, with comments.</small>
+                        </p>
+                    </div>
+
+                    <div>
+                        <span>03</span>
+                        <p>
+                            <b>Track</b>
+                            <small>See the current status anytime.</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-card">
+                <div class="tabs">
+                    <button class="tab active" data-auth-tab="login">
+                        Sign in
+                    </button>
+
+                    <button class="tab" data-auth-tab="register">
+                        Student registration
+                    </button>
+                </div>
+
+                <!-- LOGIN FORM -->
+                <form id="login-form" class="form-stack">
+                    <h2>Welcome back</h2>
+
+                    <p class="muted">
+                        Sign in with your college account.
+                    </p>
+
+                    <label>
+                        Account type
+                        <select id="login-role" required>
+                            <option value="student">Student</option>
+                            <option value="dsa">
+                                Dean of Student Affairs (DSA)
+                            </option>
+                            <option value="sso">
+                                Student Service Officer (SSO)
+                            </option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Email or college ID
+                        <input
+                            name="email"
+                            type="text"
+                            placeholder="you@college.edu.bt or college ID"
+                            autocomplete="username"
+                            required>
+                    </label>
+
+                    <label>
+                        Password
+                        <input
+                            name="password"
+                            type="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required>
+                    </label>
+
+                    <button class="btn btn-primary btn-wide" type="submit">
+                        Sign in <span>→</span>
+                    </button>
+
+                    <!-- RESEND VERIFICATION EMAIL BUTTON -->
+                    <button
+                        type="button"
+                        class="btn btn-soft btn-wide"
+                        id="resend-verification-btn">
+                        Resend Verification Email
+                    </button>
+
+                    <p id="resend-message" class="form-note"></p>
+
+                    <p class="form-note">
+                        Staff accounts are issued by the portal administrator.
+                        Do not share your password.
+                    </p>
+                </form>
+
+                <!-- STUDENT REGISTRATION FORM -->
+                <form id="register-form" class="form-stack hidden">
+                    <h2>Create student account</h2>
+
+                    <p class="muted">
+                        Registration is available for students only.
+                    </p>
+
+                    <label>
+                        Full name
+                        <input
+                            name="fullName"
+                            required
+                            maxlength="120"
+                            placeholder="Your full name">
+                    </label>
+
+                    <label>
+                        College / student ID
+                        <input
+                            name="studentNumber"
+                            required
+                            maxlength="40"
+                            placeholder="e.g. 2023-DSDA-001">
+                    </label>
+
+                    <label>
+                        College email
+                        <input
+                            name="email"
+                            type="email"
+                            required
+                            placeholder="you@example.com">
+                    </label>
+
+                    <label>
+                        Password
+                        <input
+                            name="password"
+                            type="password"
+                            minlength="8"
+                            required
+                            placeholder="At least 8 characters">
+                    </label>
+
+                    <button class="btn btn-primary btn-wide" type="submit">
+                        Create account <span>→</span>
+                    </button>
+
+                    <p class="form-note">
+                        New accounts receive a default leave allowance of 10 days.
+                        After signing in, complete your student profile before applying for leave.
+                    </p>
+                </form>
+            </div>
+        </section>
+
+        <section id="dashboard-view" class="hidden">
+            <div id="dashboard-content"></div>
+        </section>
+
+        <footer class="footer">
+            Sherubtse Pass Application Portal
+            <span>·</span>
+            CSP301 Back-End Web Development
+        </footer>
+    </main>
+</div>
+
+<dialog id="detail-dialog" class="detail-dialog">
+    <div class="dialog-head">
+        <div>
+            <span class="eyebrow">REQUEST DETAILS</span>
+            <h2 id="dialog-title">Leave request</h2>
+        </div>
+
+        <button class="icon-btn" id="close-dialog" aria-label="Close">
+            ×
+        </button>
+    </div>
+
+    <div id="dialog-body"></div>
+</dialog>
+
+<script src="/js/app.js" defer></script>
+
+</body>
+</html>
