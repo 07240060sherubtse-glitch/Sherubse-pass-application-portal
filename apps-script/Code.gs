@@ -1,3 +1,7 @@
+function doGet() {
+  return json({ ok: true, service: 'Sherubtse Portal Email' });
+}
+
 function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents);
@@ -25,7 +29,10 @@ function doPost(e) {
     return json({ ok: true });
   } catch (error) {
     console.error(error);
-    return json({ ok: false, error: 'Email could not be sent by Apps Script.' });
+    const message = error && error.message
+      ? error.message
+      : 'Unknown Apps Script error.';
+    return json({ ok: false, error: message });
   }
 }
 
