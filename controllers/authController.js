@@ -11,12 +11,16 @@ exports.register = async (req,res) => {
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({error:'Enter a valid email address.'});
   if(!studentNumber?.trim()) return res.status(400).json({error:'College/student ID is required.'});
   const user=await Auth.createStudent({fullName:fullName.trim(),email:email.trim(),studentNumber:studentNumber.trim(),password});
-  const verificationToken=crypto.randomBytes(32).toString('hex');
-  const tokenHash=crypto.createHash('sha256').update(verificationToken).digest('hex');
-  await Auth.setVerificationToken(user.id,tokenHash,new Date(Date.now()+24*60*60*1000));
-  try { await mailer.sendVerificationEmail(user.email,user.full_name,verificationToken); }
-  catch(mailError) { console.error('Verification email could not be sent:',mailError.message); return res.status(503).json({error:'Your account was created, but the verification email could not be sent. Check the email settings and contact the portal administrator to resend it.'}); }
-  res.status(201).json({message:'Registration successful. Please check your email and verify your account before logging in.'});
+  try {
+   const verificationToken=crypto.randomBytes(32).toString('hex');
+   const tokenHash=crypto.createHash('sha256').update(verificationToken).digest('hex');
+   await Auth.setVerificationToken(user.id,tokenHash,new Date(Date.now()+24*60*60*1000));
+   await mailer.sendVerificationEmail(user.email,user.full_name,verificationToken);
+   return res.status(201).json({message:'Account Created. Please check your email and verify your account before logging in.'});
+  } catch(setupError) {
+   console.error('Account created, but verification setup failed:',setupError.message);
+   return res.status(201).json({message:'Account Created, but the verification email could not be sent. Go to the login page and use Resend Verification Email, or contact the portal administrator.'});
+  }
  } catch(e) { if(e.code==='23505') return res.status(409).json({error:'Email or college ID is already registered.'}); console.error(e); res.status(500).json({error:'Could not create account.'}); }
 };
 exports.login = async (req,res) => {

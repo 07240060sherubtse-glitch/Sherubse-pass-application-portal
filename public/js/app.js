@@ -1311,14 +1311,13 @@ $('#register-form').addEventListener('submit', async e => {
             body: JSON.stringify(Object.fromEntries(f.entries()))
         });
 
+        const email = f.get('email').trim();
         e.currentTarget.reset();
+        $('#login-form [name="email"]').value = email;
 
         showAuthTab('login');
 
-        toast(
-            'Account registration successful! ' +
-            (out.message || 'Please verify your email before logging in.')
-        );
+        toast(out.message || 'Account Created. Please verify your email before logging in.');
 
     } catch (err) {
         toast(err.message, true);

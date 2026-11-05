@@ -63,6 +63,30 @@ describe('Student profile', () => {
     expect(mailer.sendVerificationEmail).toHaveBeenCalled();
   });
 
+  test('returns a successful account-creation response when verification email delivery fails', async () => {
+    Auth.createStudent.mockResolvedValue({
+      id: 17,
+      email: 'student@example.com',
+      full_name: 'Test Student'
+    });
+    Auth.setVerificationToken.mockResolvedValue(undefined);
+    mailer.sendVerificationEmail.mockRejectedValue(new Error('SMTP unavailable'));
+
+    const res = response();
+    await authController.register({
+      body: {
+        fullName: 'Test Student',
+        email: 'student@example.com',
+        studentNumber: 'STU-001',
+        password: 'secure-password'
+      }
+    }, res);
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body.message).toMatch(/^Account Created,/);
+    expect(res.body.message).toContain('Resend Verification Email');
+  });
+
   test('validates and saves a student-owned profile update', async () => {
     const profile = {
       course: 'DSDA',
